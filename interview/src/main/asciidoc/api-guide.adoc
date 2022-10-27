@@ -1,0 +1,148 @@
+= Documentation of the advertisement management (springboot maven)
+
+= How to run the app
+
+:sectnums:
+== Database creation
+In order to run the app a postgresql database is needed. To do so, create an empty database with the following properties (or modify the "application.properties" file in the root of the app so that it fits with your configuration)
+[source,json]
+----
+databasename : "interview"
+database port : "5432"
+username : "postgres"
+password : "postgres"
+----
+
+== Clean and build the app
+In order to avoid any other concern, please clean and build the app (using your IDE if you want or maven commands. During my assessement, I've used Netbeans IDE).
+
+== Run the app
+After building the app, run it so It can create all the table using ORM and deploy the app on http://localhost:8080 port.
+
+= Web services documentation
+
+:sectnums:
+[start=10]
+== Dealer
+Dealer is defined by the following fields
+----
+String id;
+
+String name;
+
+int tierLimit;
+----
+
+A Dealer has (if not precised) by default a *tierlimit = 1* .
+
+The available web service for a Dealer are defined below:
+
+=== Add a new Dealer 
+
+.request
+include::{snippets}/create-dealer/http-request.adoc[]
+
+.response
+include::{snippets}/create-dealer/http-response.adoc[]
+
+=== Update a Dealer information
+.request
+include::{snippets}/update dealer/http-request.adoc[]
+
+.response
+include::{snippets}/update dealer/http-response.adoc[]
+
+=== Increase a tier limit of a Dealer 
+.request
+include::{snippets}/update-tier/http-request.adoc[]
+
+.response
+include::{snippets}/update-tier/http-response.adoc[]
+
+= Listing 
+Listing is defined by the following fields
+----
+String id;
+Dealer dealerId;
+String vehicle;
+Float price;
+Date createdAt;
+String state;
+----
+
+== Add a listing
+A new created listing should be *draft*
+.request
+include::{snippets}/create-listing/http-request.adoc[]
+
+.response
+include::{snippets}/create-listing/http-response.adoc[]
+
+== Update a listing
+.request
+include::{snippets}/update-listing/http-request.adoc[]
+
+.response
+include::{snippets}/update-listing/http-response.adoc[]
+
+== Publish a listing
+----
+PUT request's path variable : 
+first-parameter : dealer ID
+second-parameter : boolean (true throw error when the limit of dealer is reached , false put the oldest publised listings to draft before publishing the new)
+----
+
+.request
+include::{snippets}/publish-listing/http-request.adoc[]
+
+.response
+include::{snippets}/publish-listing/http-response.adoc[]
+
+== Unpublish a listing
+----
+PUT request's path variable : 
+first-parameter : dealer ID
+----
+.request
+include::{snippets}/unpublish-listing/http-request.adoc[]
+
+.response
+include::{snippets}/unpublish-listing/http-response.adoc[]
+
+== Get a listings of a dealer with given state
+
+----
+GET request path variable : 
+first-parameter : dealer ID
+second-parameter : Draft/published
+----
+.request
+include::{snippets}/list-listing-by-dealer-id/http-request.adoc[]
+
+.response
+include::{snippets}/list-listing-by-dealer-id/http-response.adoc[]
+
+
+= SUGGESSION OF IMPROVEMENT
+
+Even though I couldn't have enough time (I had only 2 days because I the assessement mail when through my spam) to work on the project, I'm optimistic about
+the result and hope I would get to the next step of the recruitment process.
+
+Beside all that, here are some ideas that can help improve the project :
+
+
+:sectnums:
+.. Create delete functionality for dealer and their advertisements.
+.. Allow Bulk operations (create a lot of listing in the same request)
+.. Create a dealer with listing
+.. add another field (an identification number for example) to distinguish dealers with the same name.
+.. control the information sent by the user
+.. etc. 
+
+
+
+= Tools I used for the developpement
+
+Netbeans IDE 15, postgreSql, java springboot 4.0.0, "postman" to test the webservices, and Rest Docs for the documentation.
+
+Lombok framework was used to remove the boiled plate code of springboot framework(setter, getter, constructor, equals , hashcode, and logging with SLF4J) 
